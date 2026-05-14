@@ -1,1 +1,216 @@
-
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英熟語 Flashcard Vol.2 — N02</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0d0f14;--bg2:#141720;--bg3:#1c2030;--bg4:#242840;--accent:#3b82f6;--accent2:#60a5fa;--accent3:#1d4ed8;--ok:#22c55e;--ng:#ef4444;--warn:#f59e0b;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;--border:#2d3748;--border2:#374151;--A:#3b82f6;--B:#22c55e;--C:#a855f7;--D:#f59e0b;--font:'Times New Roman','Noto Serif JP',Georgia,serif;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh}
+.pbar{height:3px;background:var(--bg3);position:fixed;top:0;left:0;right:0;z-index:20}
+.pfill{height:100%;background:var(--accent);transition:width .35s ease}
+#hdr{background:var(--bg2);border-bottom:1px solid var(--border);padding:9px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:3px;z-index:10}
+.hl{display:flex;align-items:center;gap:10px}
+.badge{background:var(--accent3);color:#fff;font-size:11px;font-weight:700;padding:2px 9px;border-radius:4px;letter-spacing:.5px;font-family:sans-serif}
+.htitle{font-size:14px;font-weight:700;color:var(--text)}
+.hr{display:flex;align-items:center;gap:18px}
+.scbox{display:flex;gap:14px;align-items:center;font-size:13px;font-family:sans-serif}
+.sc-ok{color:var(--ok);font-weight:700}.sc-ng{color:var(--ng);font-weight:700}.sc-lbl{color:var(--text3)}.sc-pos{color:var(--text2);font-weight:600}
+.timer{font-size:14px;color:var(--text2);font-family:'Courier New',monospace;min-width:52px;text-align:right}
+#tabs{background:var(--bg2);border-bottom:1px solid var(--border);display:flex;padding:0 16px;overflow-x:auto}
+.tab{padding:10px 15px;font-size:13px;font-weight:700;cursor:pointer;border-bottom:2px solid transparent;color:var(--text3);transition:.2s;white-space:nowrap;flex-shrink:0;font-family:sans-serif}
+.tab.active.A{border-color:var(--A);color:var(--A)}.tab.active.B{border-color:var(--B);color:var(--B)}.tab.active.C{border-color:var(--C);color:var(--C)}.tab.active.D{border-color:var(--D);color:var(--D)}
+#main{padding:20px 16px;max-width:720px;margin:0 auto}
+.qcard{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px}
+.qmeta{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.qnum-badge{font-size:11px;font-weight:700;padding:3px 11px;border-radius:20px;border:1px solid;font-family:sans-serif}
+.qnum-badge.A{color:var(--A);border-color:var(--A);background:rgba(59,130,246,.1)}.qnum-badge.B{color:var(--B);border-color:var(--B);background:rgba(34,197,94,.1)}.qnum-badge.C{color:var(--C);border-color:var(--C);background:rgba(168,85,247,.1)}.qnum-badge.D{color:var(--D);border-color:var(--D);background:rgba(245,158,11,.1)}
+.qtype-lbl{font-size:11px;color:var(--text3);font-family:sans-serif}
+.qtext{font-size:17px;line-height:1.9;color:var(--text);white-space:pre-line;margin-bottom:2px}
+.qtext-jp{font-size:17px;line-height:1.8;color:var(--text);font-weight:500;margin-bottom:10px}
+.qtext-en{font-size:16px;line-height:2.1;color:var(--text2);font-style:italic}
+.qtext-guide{font-size:13px;color:var(--text3);margin-top:8px;padding:7px 10px;background:var(--bg3);border-radius:6px;border-left:3px solid var(--text3);font-family:sans-serif}
+.blank{display:inline-block;min-width:100px;border-bottom:2px solid var(--accent);color:var(--accent2);font-weight:700;text-align:center;padding:0 8px;vertical-align:bottom;line-height:1.8;margin:0 2px}
+.abtn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--border2);color:var(--accent2);padding:5px 13px;border-radius:6px;font-size:12px;cursor:pointer;margin-top:10px;transition:.2s;font-family:sans-serif}
+.abtn:hover{background:var(--bg3);border-color:var(--accent)}.abtn svg{width:13px;height:13px;fill:currentColor}
+.choices{display:flex;flex-direction:column;gap:9px;margin-top:18px}
+.cbtn{background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:12px 15px;border-radius:9px;font-size:15px;text-align:left;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:11px;line-height:1.5;font-family:var(--font)}
+.cbtn:hover:not(:disabled){background:var(--bg4);border-color:var(--accent)}.cbtn .lbl{font-size:11px;color:var(--text3);font-weight:700;min-width:20px;flex-shrink:0;font-family:sans-serif}
+.cbtn.ok{background:rgba(34,197,94,.12);border-color:var(--ok);color:var(--ok)}.cbtn.ng{background:rgba(239,68,68,.12);border-color:var(--ng);color:var(--ng)}.cbtn:disabled{cursor:default}
+.iarea{margin-top:16px}
+.qtimer-wrap{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.qtimer-bar-bg{flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden}
+.qtimer-bar{height:100%;background:var(--accent);border-radius:3px;transition:width .9s linear}
+.qtimer-bar.warn{background:var(--warn)}.qtimer-bar.danger{background:var(--ng)}
+.qtimer-num{font-size:13px;font-weight:700;color:var(--text2);min-width:28px;text-align:right;font-family:'Courier New',monospace}
+.qtimer-num.warn{color:var(--warn)}.qtimer-num.danger{color:var(--ng)}
+.irow{display:flex;gap:9px;align-items:stretch}
+.tinput{flex:1;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:10px 14px;border-radius:9px;font-size:15px;font-family:var(--font);outline:none;transition:.2s}
+.tinput:focus{border-color:var(--accent);background:var(--bg4)}.tinput.ok{border-color:var(--ok);background:rgba(34,197,94,.08);color:var(--ok)}.tinput.ng{border-color:var(--ng);background:rgba(239,68,68,.08);color:var(--ng)}
+.sbtn{background:var(--accent3);border:none;color:#fff;padding:10px 18px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;transition:.2s;white-space:nowrap;font-family:sans-serif}
+.sbtn:hover{background:var(--accent)}.sbtn:disabled{opacity:.4;cursor:default}
+.hbtn{background:none;border:none;color:var(--warn);font-size:12px;cursor:pointer;padding:5px 0;margin-top:4px;display:none;font-family:sans-serif}
+.hbox{font-size:12px;color:var(--warn);margin-top:5px;padding:6px 10px;background:rgba(245,158,11,.08);border-radius:6px;border:1px solid rgba(245,158,11,.25);display:none;font-family:sans-serif}
+.fb{border-radius:9px;padding:14px 16px;margin-top:14px;display:none;line-height:1.7}.fb.ok{background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.25)}.fb.ng{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.25)}
+.fb-tabs{display:flex;margin-bottom:10px;border-bottom:1px solid var(--border2)}
+.fbtab{padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;border-bottom:2px solid transparent;color:var(--text3);transition:.15s;font-family:sans-serif}.fbtab.active{border-color:var(--accent2);color:var(--accent2)}
+.fbc{display:none}.fbc.show{display:block}
+.fb-ans-row{font-size:14px;margin-bottom:7px;font-family:sans-serif}.fb-ans{color:var(--accent2);font-weight:700;font-family:var(--font)}.fb-note{font-size:13px;color:var(--text2);line-height:1.75;font-family:sans-serif}.fb-jp{font-size:13px;color:var(--text);line-height:1.8;padding:8px 0;font-family:sans-serif}
+.nxtbtn{display:none;width:100%;margin-top:14px;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:12px;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;transition:.2s;text-align:right;font-family:sans-serif}.nxtbtn:hover{background:var(--bg4);border-color:var(--accent)}
+.scard{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:36px 24px;text-align:center}.sbig{font-size:68px;font-weight:700;color:var(--accent2);line-height:1}.slbl{font-size:15px;color:var(--text2);margin-top:8px;margin-bottom:28px;font-family:sans-serif}
+.ssecs{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:28px}.ssec{border-radius:9px;padding:15px;text-align:center}
+.ssec.A{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3)}.ssec.B{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3)}.ssec.C{background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3)}.ssec.D{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3)}
+.sn{font-size:11px;font-weight:700;line-height:1.4;font-family:sans-serif}.ssec.A .sn{color:var(--A)}.ssec.B .sn{color:var(--B)}.ssec.C .sn{color:var(--C)}.ssec.D .sn{color:var(--D)}
+.sv{font-size:26px;font-weight:700;margin-top:5px}.ssec.A .sv{color:var(--A)}.ssec.B .sv{color:var(--B)}.ssec.C .sv{color:var(--C)}.ssec.D .sv{color:var(--D)}
+.rbtn{width:100%;padding:13px;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;border:none;margin-top:10px;transition:.2s;font-family:sans-serif}.rbtn.p{background:var(--accent3);color:#fff}.rbtn.p:hover{background:var(--accent)}.rbtn.s{background:var(--bg3);color:var(--text);border:1px solid var(--border2)}.rbtn.s:hover{background:var(--bg4)}
+@media(max-width:480px){.qtext,.qtext-jp,.qtext-en{font-size:15px}.htitle{font-size:12px}.tab{padding:9px 11px;font-size:12px}.blank{min-width:76px}}</style>
+</head>
+<body>
+<div class="pbar"><div class="pfill" id="pf"></div></div>
+<div id="hdr">
+  <div class="hl"><span class="badge">Vol.2</span><span class="htitle">英熟語 Flashcard — N02</span></div>
+  <div class="hr">
+    <div class="scbox">
+      <span><span class="sc-ok" id="sc-ok">0</span><span class="sc-lbl"> 正解</span></span>
+      <span><span class="sc-ng" id="sc-ng">0</span><span class="sc-lbl"> 不正解</span></span>
+      <span class="sc-pos" id="sc-pos">1/20問</span>
+    </div>
+    <div class="timer" id="tmr">0:00</div>
+  </div>
+</div>
+<div id="tabs">
+  <div class="tab A" id="tab-A">A：4択</div>
+  <div class="tab B" id="tab-B">B：連語補充</div>
+  <div class="tab C" id="tab-C">C：1語言換え</div>
+  <div class="tab D" id="tab-D">D：和→英</div>
+</div>
+<div id="main"></div>
+<script>
+const MP3={
+  f1:'\u82f1\u719f\u8a9eTargetno.2-1mp3.mp3',
+  f2:'\u82f1\u719f\u8a9eTargetno2-2.mp3',
+  f3:'\u82f1\u719f\u8a9eTargetno2-3mp3.mp3',
+  f4:'\u82f1\u719f\u8a9eTargetno3-3\u8ffd\u52a0.mp3'
+};
+const POOL=[{"id": "A1", "sec": "A", "sent": 1, "q": "Miki was kind enough to come with the car to ____ ____ ____ at the airport.", "opts": ["pick me up", "pick me out", "pick me over", "pick me on"], "a": "pick me up", "n": "pick up「〜を車で迎えに行く」。pick me up で3語。pick out「選び出す」との混同に注意。", "jp": "Miki は空港まで車で迎えに来てくれるほど親切だった。", "audio": {"file": "f1", "start": 0.0, "end": 3.462}}, {"id": "A2", "sec": "A", "sent": 2, "q": "My dream is to ____ ____ a small recording studio at my house.", "opts": ["set up", "set off", "set out", "set back"], "a": "set up", "n": "set up「〜を設立する・立ち上げる」。set off「出発する」、set out「始める・出発する」と区別。", "jp": "自宅に小さなレコーディングスタジオを設立するのが夢だ。", "audio": {"file": "f1", "start": 4.789, "end": 8.327}}, {"id": "A3", "sec": "A", "sent": 5, "q": "If you are not feeling well, you'd better see a doctor to ____ ____ what is wrong.", "opts": ["find out", "find off", "figure in", "look into"], "a": "find out", "n": "find out「〜を知る・突き止める」。figure out も「理解する」だが、何が問題かを突き止めるニュアンスはfind out が自然。", "jp": "体調が悪いなら、何が問題なのかを突き止めるために医者に診てもらった方がいい。", "audio": {"file": "f1", "start": 19.644, "end": 23.217}}, {"id": "A4", "sec": "A", "sent": 9, "q": "The e-mail address she'd given me ____ ____ to be completely wrong.", "opts": ["turned out", "turned up", "turned off", "turned down"], "a": "turned out", "n": "turn out to be「〜であることが判明する」。turn up「現れる」、turn off「消す」、turn down「断る・音量を下げる」。", "jp": "彼女が教えてくれたメールアドレスは全くの間違いであることが判明した。", "audio": {"file": "f1", "start": 40.558, "end": 43.955}}, {"id": "A5", "sec": "A", "sent": 11, "q": "You should always be careful when you ____ ____ an application form.", "opts": ["fill out", "fill in", "fill up", "fill over"], "a": "fill out", "n": "fill out / fill in「（書類に）記入する」は同義。fill up「いっぱいにする」は意味が異なる。", "jp": "申込書に記入するときは常に気をつけるべきだ。", "audio": {"file": "f1", "start": 48.731, "end": 51.807}}, {"id": "A6", "sec": "A", "sent": 12, "q": "The boy ____ ____ the jacket he'd put on just a minute before.", "opts": ["took off", "took out", "took over", "took up"], "a": "took off", "n": "take off「（服を）脱ぐ・離陸する」。take out「取り出す」、take over「引き継ぐ」、take up「始める・占める」。", "jp": "その少年はほんの1分前に着たばかりのジャケットを脱いだ。", "audio": {"file": "f1", "start": 53.11, "end": 55.99}}, {"id": "A7", "sec": "A", "sent": 14, "q": "Our plane couldn't ____ ____ because of bad weather.", "opts": ["take off", "take out", "take over", "take up"], "a": "take off", "n": "take off「離陸する」（文12と同じ熟語の別義）。文脈（服を脱ぐ vs 離陸する）で意味を区別しよう。", "jp": "悪天候のため私たちの飛行機は離陸できなかった。", "audio": {"file": "f1", "start": 62.468, "end": 65.51}}, {"id": "A8", "sec": "A", "sent": 18, "q": "Unless it rains, the athletic meet will ____ ____ on the playground as scheduled.", "opts": ["take place", "take off", "take care", "take part"], "a": "take place", "n": "take place「行われる・開催される」＝ be held。take off「離陸」、take part「参加」と混同しないこと。", "jp": "雨が降らない限り、運動会は予定通りグラウンドで行われる。", "audio": {"file": "f1", "start": 80.644, "end": 84.576}}, {"id": "A9", "sec": "A", "sent": 19, "q": "When you leave the room, ____ ____ you've turned off the light.", "opts": ["make sure", "make up", "make out", "make over"], "a": "make sure", "n": "make sure「必ず〜する・確認する」。that節やyou'veのような完了形が続くことが多い。", "jp": "部屋を出るときは必ず電気を消したか確認しなさい。", "audio": {"file": "f1", "start": 85.939, "end": 88.679}}, {"id": "A10", "sec": "A", "sent": 20, "q": "Where you live can ____ a ____ in how long you live.", "opts": ["make / difference", "take / place", "make / progress", "give / care"], "a": "make / difference", "n": "make a difference「違いを生む・重要な影響を与える」。make progress「進歩する」、take place「行われる」と区別。", "jp": "どこに住むかが寿命にも影響を与えうる。", "audio": {"file": "f1", "start": 90.013, "end": 92.604}}, {"id": "A11", "sec": "D", "sent": 23, "q": "今学年どの科目を履修するか、もう決心しましたか？\n→ Have you ____ ____ your ____ which subjects you will take this school year?", "a": "made up mind", "n": "make up one's mind「決心する」＝ decide。made / up / mind の3語を順に入れる。", "jp": "今学年どの科目を履修するか決心しましたか？", "audio": {"file": "f2", "start": 9.285, "end": 12.109}, "alts": [], "hint": "made ___ your ___"}, {"id": "A12", "sec": "A", "sent": 26, "q": "We should ____ ____ ____ our health by eating healthy food and doing regular exercise.", "opts": ["take care of", "take part in", "put up with", "take advantage of"], "a": "take care of", "n": "take care of「〜の世話をする・〜に気をつける」。take part in「参加する」、put up with「我慢する」、take advantage of「利用する」と区別。", "jp": "健康的な食事と定期的な運動で健康に気をつけるべきだ。", "audio": {"file": "f2", "start": 23.065, "end": 27.7}}, {"id": "A13", "sec": "A", "sent": 27, "q": "We're all really ____ ____ ____ hearing from you soon.", "opts": ["looking forward to", "looking up to", "looking forward for", "looking out for"], "a": "looking forward to", "n": "look forward to doing「〜を楽しみにする」。toの後は名詞またはdoingが来る点に注意。", "jp": "皆、あなたから近いうちに連絡が来るのをとても楽しみにしています。", "audio": {"file": "f2", "start": 29.206, "end": 32.096}}, {"id": "A14", "sec": "A", "sent": 29, "q": "We want to ____ ____ ____ two pieces of furniture before we move into our new house.", "opts": ["get rid of", "get along with", "get over", "get through"], "a": "get rid of", "n": "get rid of「〜を取り除く・処分する」。get along with「〜とうまくやる」、get over「〜を乗り越える」と区別。", "jp": "新しい家に引っ越す前に家具を2点処分したい。", "audio": {"file": "f2", "start": 38.666, "end": 42.697}}, {"id": "A15", "sec": "A", "sent": 32, "q": "One of the problems with cellphones is that they can ____ us ____ relaxing.", "opts": ["prevent / from", "stop / to", "keep / away", "prevent / to"], "a": "prevent / from", "n": "prevent A from doing「AがBするのを妨げる」。keep away は「遠ざける」で意味が異なる。stop の後は to ではなく from が必要。", "jp": "携帯電話の問題の1つは、リラックスするのを妨げる可能性があることだ。", "audio": {"file": "f2", "start": 55.231, "end": 59.128}}, {"id": "B1", "sec": "B", "sent": 4, "q": "My kid sister has been spending a lot of time ____ ____ on her English lately.", "a": "brushing up", "n": "brush up on「〜を復習する・ブラッシュアップする」。onの前がbrushing up。", "jp": "妹は最近、英語をやり直すことに多くの時間を費やしている。", "hint": "brush ___ on", "audio": {"file": "f1", "start": 14.53, "end": 18.327}}, {"id": "B2", "sec": "B", "sent": 6, "q": "The biologist has been ____ ____ long-term research into the behavior of belugas.", "a": "carrying out", "n": "carry out「〜を実施する・遂行する」。長期研究を「実施している」文脈。", "jp": "その生物学者はシロイルカの行動に関する長期研究を行ってきた。", "hint": "carry ___", "audio": {"file": "f1", "start": 24.648, "end": 29.117}}, {"id": "B3", "sec": "B", "sent": 8, "q": "Scientists are trying to ____ ____ how the universe came into being.", "a": "figure out", "n": "figure out「〜を解明する・理解する」。come into being「生まれる・存在するようになる」もあわせて覚えよう。", "jp": "科学者たちは宇宙がどのようにして生まれたかを解明しようとしている。", "hint": "figure ___", "audio": {"file": "f1", "start": 35.719, "end": 39.217}}, {"id": "B4", "sec": "B", "sent": 15, "q": "Since my grandparents live in a rural area, they can't ____ ____ without a car.", "a": "get along", "n": "get along without「〜なしでやっていく」。この文ではwithoutが続き「車なしでは生活できない」。", "jp": "祖父母は田舎に住んでいるので、車なしでは生活できない。", "hint": "get ___", "audio": {"file": "f1", "start": 66.763, "end": 70.812}}, {"id": "B5", "sec": "B", "sent": 16, "q": "I've always ____ ____ well with all my friends.", "a": "gotten along", "n": "get along well with「〜とうまくやっていく」。gotten は getの過去分詞（米語）。", "jp": "私はいつも友達全員とうまくやってきた。", "hint": "gotten ___", "audio": {"file": "f1", "start": 72.118, "end": 74.634}}, {"id": "B6", "sec": "B", "sent": 24, "q": "If you ____ ____ in a foreign country, do not hesitate to ask somebody for help.", "a": "get lost", "n": "get lost「迷子になる・道に迷う」。hesitate to do「〜するのをためらう」もあわせて覚えよう。", "jp": "外国で迷子になっても、ためらわずに誰かに助けを求めなさい。", "hint": "get ___", "audio": {"file": "f2", "start": 13.547, "end": 17.596}}, {"id": "B7", "sec": "B", "sent": 25, "q": "Everybody, please ____ ____ to what I am going to say!", "a": "pay attention", "n": "pay attention to「〜に注意を払う」。toの後に注意を向ける対象が来る。", "jp": "皆さん、これから私が言うことに注意してください！", "hint": "pay ___", "audio": {"file": "f2", "start": 19.019, "end": 21.79}}, {"id": "B8", "sec": "B", "sent": 33, "q": "This song always ____ me ____ the good old days I enjoyed growing up in the countryside.", "a": "reminds of", "n": "remind A of B「AにBを思い出させる」。reminds / of の2語を順に入れる。", "jp": "この歌はいつも田舎で育ったあの懐かしい日々を思い出させる。", "hint": "", "audio": {"file": "f2", "start": 60.605, "end": 65.279}}, {"id": "B9", "sec": "B", "sent": 34, "q": "Despite the difficulties, many elderly people ____ learning foreign languages ____ fun.", "a": "regard as", "n": "regard A as B「AをBとみなす」。____learning____の形で regard / as を入れる。", "jp": "困難にもかかわらず、多くのお年寄りが外国語を学ぶことを楽しいとみなしている。", "hint": "regard ___ as", "audio": {"file": "f2", "start": 66.855, "end": 71.725}}, {"id": "B10", "sec": "B", "sent": 37, "q": "When we call something a fruit, we necessarily ____ it ____ vegetables.", "a": "distinguish from", "n": "distinguish A from B ≒ tell A from B「AをBと区別する」。distinguish from / tell from どちらも正解。", "jp": "私たちが何かをフルーツと呼ぶとき、必然的にそれを野菜と区別している。", "hint": "distinguish from（スペースを入れて入力）", "audio": {"file": "f2", "start": 83.885, "end": 88.127}, "alts": ["tell from"]}, {"id": "B11", "sec": "B", "sent": 43, "q": "The twins look so much alike that ____ ____ I can't tell them apart.", "a": "at times", "n": "at times「時々」＝ sometimes。tell A apart「AとBを見分ける」もあわせて覚えよう。", "jp": "その双子はとてもよく似ているので、時々見分けられない。", "hint": "at ___", "audio": {"file": "f3", "start": 11.002, "end": 14.597}}, {"id": "B12", "sec": "B", "sent": 47, "q": "We thought everything was going on smoothly, but ____ ____, we were all mistaken.", "a": "in reality", "n": "in reality「実際には」＝ in fact / actually。外見と実態の対比に使う表現。", "jp": "すべてがうまく進んでいると思っていたが、実際には皆間違っていた。", "hint": "in ___", "audio": {"file": "f3", "start": 32.789, "end": 37.577}}, {"id": "B13", "sec": "B", "sent": 54, "q": "We all went out and ____ ____ ____ open-air exercise in spite of the bad weather.", "a": "took part in", "n": "take part in「〜に参加する」＝ participate in。in spite of「〜にもかかわらず」もあわせて確認。", "jp": "悪天候にもかかわらず、皆外に出て野外運動に参加した。", "hint": "took ___ in", "audio": {"file": "f3", "start": 72.15, "end": 76.351}}, {"id": "B14", "sec": "B", "sent": 57, "q": "Today there are some workers who retire ____ ____ their retirement age.", "a": "ahead of", "n": "ahead of「〜より前に・〜を先取りして」。retire ahead of retirement age「定年より前に退職する」。", "jp": "今日、定年前に退職する労働者が増えている。", "hint": "ahead ___", "audio": {"file": "f3", "start": 90.175, "end": 93.856}}, {"id": "B15", "sec": "B", "sent": 58, "q": "Right now I'm studying hard ____ ____ ____ the term exams, which begin next week.", "a": "in preparation for", "n": "in preparation for「〜の準備として」。which begin next weekは関係節でterm examsを修飾。", "jp": "来週始まる期末試験の準備として今一生懸命勉強中だ。", "hint": "in preparation ___", "audio": {"file": "f3", "start": 95.127, "end": 99.535}}, {"id": "C1", "sec": "C", "sent": 3, "q": "I woke up just past noon because I stayed up late last night watching TV.\n（下線部 stayed up late を remained awake の形に書き換えよ）", "a": "remained awake", "n": "stay up late「遅くまで起きている」≒ remain awake late / stay awake late。remained awake が最も自然な書き換え。", "jp": "昨夜テレビを見て遅くまで起きていたので、私は昼過ぎまで寝ていた。", "hint": "", "audio": {"file": "f1", "start": 9.764, "end": 13.46}}, {"id": "C2", "sec": "C", "sent": 7, "q": "I don't need to point out that the food you eat has a direct impact on your health.\n(下線部 point out を1語の動詞に言い換えよ)", "a": "indicate", "n": "point out ≒ indicate「指摘する・示す」。mention / note も可。", "jp": "あなたが食べる食べ物が健康に直接影響することを指摘する必要はない。", "hint": "indicate / mention", "audio": {"file": "f1", "start": 30.417, "end": 34.349}}, {"id": "C3", "sec": "C", "sent": 9, "q": "The e-mail address she'd given me turned out to be completely wrong.\n（下線部 turned out を1語の動詞に言い換えよ）", "a": "proved", "n": "turn out ≒ prove「〜であることが判明する」。proved が最も自然な1語の言い換え。", "jp": "彼女が教えてくれたメールアドレスは全くの間違いであることが判明した。", "hint": "prove", "audio": {"file": "f1", "start": 40.558, "end": 43.955}}, {"id": "C4", "sec": "C", "sent": 13, "q": "Many scientists today are working on AI technology to make our lives better.\n(下線部 working on を1語に言い換えよ)", "a": "developing", "n": "work on「〜に取り組む」≒ developing / studying / researching（文脈により）。", "jp": "今日多くの科学者が私たちの生活をよりよくするためAI技術に取り組んでいる。", "hint": "develop / research", "audio": {"file": "f1", "start": 57.22, "end": 61.138}}, {"id": "C5", "sec": "C", "sent": 17, "q": "One of the best ways to calm yourself down is to take a deep breath.\n(下線部 calm yourself down を1語に言い換えよ)", "a": "relax", "n": "calm down ≒ relax「落ち着く」。soothe（他動詞）も可。", "jp": "落ち着くための最も良い方法の1つは深呼吸することだ。", "hint": "relax / soothe", "audio": {"file": "f1", "start": 75.85, "end": 79.297}}, {"id": "C6", "sec": "C", "sent": 22, "q": "Speech-to-text technology has made great progress in recent years.\n（下線部 made progress を1語の動詞に言い換えよ）", "a": "advanced", "n": "make progress ≒ advance / improve「進歩する」。", "jp": "音声テキスト変換技術は近年大きな進歩を遂げた。", "hint": "advance / improve", "audio": {"file": "f2", "start": 4.55, "end": 8.123}}, {"id": "C7", "sec": "C", "sent": 29, "q": "We want to get rid of two pieces of furniture before we move into our new house.\n(下線部 get rid of を1語に言い換えよ)", "a": "remove", "n": "get rid of ≒ remove / eliminate「取り除く・処分する」。いずれも正解。", "jp": "新しい家に引っ越す前に家具を2点処分したい。", "hint": "remove / eliminate", "audio": {"file": "f2", "start": 38.666, "end": 42.697}, "alts": ["eliminate", "dispose of"]}, {"id": "C8", "sec": "C", "sent": 31, "q": "A survey shows that more than half of children prefer video games to books.\n→ A survey shows that more than half of children ____ video games ____ ____ books.", "a": "like better than", "n": "prefer A to B ＝ like A better than B「BよりAを好む」。空所に like / better than を入れる。", "jp": "調査によると半数以上の子どもが本よりビデオゲームを好む。", "hint": "like ___ better than", "audio": {"file": "f2", "start": 49.656, "end": 53.686}}, {"id": "C9", "sec": "C", "sent": 33, "q": "This song always reminds me of the good old days.\n(下線部 reminds me of を使わずに言い換えよ: remind A of B ≒ make A think of B)", "a": "makes me think of", "n": "remind A of B ≒ make A think of B「AにBを思い出させる」。", "jp": "この歌はいつもあの懐かしい日々を思い出させる。", "hint": "makes ___ think of", "audio": {"file": "f2", "start": 60.605, "end": 65.279}}, {"id": "C10", "sec": "C", "sent": 38, "q": "No one likes to be criticized, and yet criticism is essential for personal growth.\n(下線部 and yet を1語の接続詞に言い換えよ)", "a": "however", "n": "and yet ≒ however / nevertheless「それでも・しかし」。逆接の接続表現。", "jp": "批判されることを好む人はいないが、それでも批判は個人の成長に不可欠だ。", "hint": "however / nevertheless", "audio": {"file": "f2", "start": 89.706, "end": 94.471}}, {"id": "C11", "sec": "C", "sent": 39, "q": "The child fell ill and, as a result, her mother had to stay home.\n(下線部 as a result を1語の接続副詞に言い換えよ)", "a": "consequently", "n": "as a result ≒ consequently / therefore「その結果・したがって」。", "jp": "その子は病気になり、その結果母親は家にいなければならなかった。", "hint": "consequently / therefore", "audio": {"file": "f2", "start": 96.114, "end": 100.95}}, {"id": "C12", "sec": "C", "sent": 47, "q": "We thought everything was going on smoothly, but in reality, we were all mistaken.\n(下線部 in reality を1語の副詞に言い換えよ)", "a": "actually", "n": "in reality ≒ actually / in fact「実際には」。", "jp": "すべてがうまく進んでいると思っていたが、実際には皆間違っていた。", "hint": "actually / in fact", "audio": {"file": "f3", "start": 32.789, "end": 37.577}}, {"id": "C13", "sec": "C", "sent": 48, "q": "I'm convinced that buying high-quality items will save us money in the long run.\n(下線部 in the long run を言い換えよ)", "a": "eventually", "n": "in the long run ≒ eventually / in the end / over time「長い目で見れば・最終的には」。", "jp": "高品質なものを買えば長い目で見てお金の節約になると確信している。", "hint": "eventually / in the end", "audio": {"file": "f3", "start": 38.85, "end": 43.125}}, {"id": "C14", "sec": "C", "sent": 54, "q": "We all took part in open-air exercise in spite of the bad weather.\n(下線部 in spite of を1語の前置詞に言い換えよ)", "a": "despite", "n": "in spite of ≒ despite「〜にもかかわらず」。どちらも前置詞として名詞の前に置く。", "jp": "悪天候にもかかわらず、皆が野外運動に参加した。", "hint": "despite", "audio": {"file": "f3", "start": 72.15, "end": 76.351}}, {"id": "C15", "sec": "C", "sent": 59, "q": "Sadly, he has completely changed; he is no longer the Masato we used to know.\n（下線部 no longer を言い換えよ）", "a": "not any more", "n": "no longer ≒ not ... any more / not ... any longer「もはや〜でない」。any more と any longer はどちらも正解。", "jp": "悲しいことに、彼は完全に変わってしまった。彼はもはや私たちが知っていたマサトではない。", "hint": "not ___ any more / not ___ any longer", "audio": {"file": "f3", "start": 100.912, "end": 106.188}, "alts": ["not anymore", "not any longer", "not longer"]}, {"id": "D1", "sec": "D", "sent": 38, "q": "批判されることを好む人はいないが、それでも批判は個人の成長に不可欠だ。\n→ No one likes to be criticized, ____ ____ criticism is essential for personal growth.", "a": "and yet", "n": "and yet「それでも・しかし」逆接の接続表現。", "jp": "No one likes to be criticized, and yet criticism is essential for personal growth.", "hint": "and ___", "audio": {"file": "f2", "start": 89.706, "end": 94.471}}, {"id": "D2", "sec": "D", "sent": 39, "q": "その子は病気になり、その結果、母親は家にいなければならなかった。\n→ The child fell ill and, ____ ____ ____, her mother had to stay home to take care of her.", "a": "as a result", "n": "as a result「その結果」。前の出来事の結果を示す。", "jp": "The child fell ill and, as a result, her mother had to stay home to take care of her.", "hint": "as a ___", "audio": {"file": "f2", "start": 96.114, "end": 100.95}}, {"id": "D3", "sec": "D", "sent": 42, "q": "これは注文したものではありません。すぐに持って行ってください。\n→ Oh, this is not what we've ordered. Take it back ____ ____.", "a": "at once", "n": "at once「すぐに・直ちに」＝ right away / immediately。いずれも正解。", "jp": "Oh, this is not what we've ordered. Take it back at once.", "hint": "at ___", "audio": {"file": "f3", "start": 5.76, "end": 9.579}, "alts": ["right away", "immediately"]}, {"id": "D4", "sec": "D", "sent": 44, "q": "ここだけの話ですが、彼はギャンブルで全財産を失った。\n→ ____ ____ ____ ____, he lost all his money by gambling.", "a": "Between you and me", "n": "between you and me「ここだけの話」。秘密の話をするときの慣用表現。", "jp": "Between you and me, he lost all his money by gambling.", "hint": "Between ___ and ___", "audio": {"file": "f3", "start": 16.076, "end": 19.482}}, {"id": "D5", "sec": "D", "sent": 45, "q": "先日、私のものによく似ていたので間違えて他の人の傘を持って行った。\n→ The other day I took someone's umbrella ____ ____ since it looked very similar to mine.", "a": "by mistake", "n": "by mistake「間違えて」。by accidentも同義。", "jp": "The other day I took someone's umbrella by mistake since it looked very similar to mine.", "hint": "by ___", "audio": {"file": "f3", "start": 20.992, "end": 25.546}}, {"id": "D6", "sec": "D", "sent": 46, "q": "コーチは自分の野球チームのプレーに決して満足していないと言った。\n→ The coach said he was ____ ____ ____ satisfied with the way his baseball team played.", "a": "by no means", "n": "by no means「決して〜ない」強い否定。not at all / never と同義。", "jp": "The coach said he was by no means satisfied with the way his baseball team played.", "hint": "by no ___", "audio": {"file": "f3", "start": 26.846, "end": 31.373}}, {"id": "D7", "sec": "D", "sent": 49, "q": "人気の観点からすると、サッカーは今日の日本でおそらくNo.1のスポーツだ。\n→ In terms of popularity, soccer is ____ ____ the No. 1 sport in Japan today.", "a": "no doubt", "n": "no doubt「おそらく・確かに・疑いなく」。副詞句として「きっと〜だ」という強い確信を表す。in terms of「〜の観点から」もあわせて確認しよう。", "jp": "In terms of popularity, soccer is no doubt the No. 1 sport in Japan today.", "hint": "no ___", "audio": {"file": "f3", "start": 44.55, "end": 49.467}, "alts": ["undoubtedly", "without doubt"]}, {"id": "D8", "sec": "D", "sent": 50, "q": "インターネットで調べた家の中で、今のところこれが一番だと思う。\n→ Of the houses I've checked on the internet ____ ____, I think this is the best.", "a": "so far", "n": "so far「今のところ・これまでのところ」。", "jp": "Of the houses I've checked on the internet so far, I think this is the best.", "hint": "so ___", "audio": {"file": "f3", "start": 50.703, "end": 54.723}}, {"id": "D9", "sec": "D", "sent": 51, "q": "この記事によれば、世界は急速に都市化し続けている。\n→ ____ ____ this article, the world is continuing to be urbanized rapidly.", "a": "According to", "n": "according to「〜によれば」。情報源を示す前置詞句。", "jp": "According to this article, the world is continuing to be urbanized rapidly.", "hint": "According ___", "audio": {"file": "f3", "start": 56.147, "end": 60.479}}, {"id": "D10", "sec": "D", "sent": 52, "q": "キャベツの価格は、主に悪天候のために急激に上昇した。\n→ The price of cabbage has gone up sharply, mainly ____ ____ the bad weather.", "a": "owing to", "n": "owing to「〜のために・〜が原因で」＝ due to / because of。いずれも正解。", "jp": "The price of cabbage has gone up sharply, mainly owing to the bad weather.", "hint": "owing ___", "audio": {"file": "f3", "start": 61.875, "end": 65.582}, "alts": ["due to", "because of"]}, {"id": "D11", "sec": "D", "sent": 53, "q": "この本のおかげで、私は何年も前に起きたことがようやく分かった。\n→ ____ ____ this book, I finally understood what had happened all those years ago.", "a": "Thanks to", "n": "thanks to「〜のおかげで」。肯定的な結果に使う（owing toは中立・否定にも使う）。", "jp": "Thanks to this book, I finally understood what had happened all those years ago.", "hint": "Thanks ___", "audio": {"file": "f3", "start": 66.804, "end": 70.839}}, {"id": "D12", "sec": "D", "sent": 55, "q": "私たちへの親しみやすさに加えて、Davidはとても話し上手でもあった。\n→ ____ ____ being very friendly to us all, David was also a very talented talker.", "a": "Apart from", "n": "apart from「〜に加えて」（肯定文）/ 「〜を除いて」（否定文）。この文は「に加えて」の意味。", "jp": "Apart from being very friendly to us all, David was also a very talented talker.", "hint": "Apart ___", "audio": {"file": "f3", "start": 77.658, "end": 82.737}}, {"id": "D13", "sec": "D", "sent": 56, "q": "アメリカで入学した学校では、ホストシスターを除いてほとんど誰も知らなかった。\n→ In the school I entered in America, I hardly knew anybody ____ ____ my host sister.", "a": "apart from", "n": "apart from「〜を除いて」（否定文）。文55と同じ熟語で意味が変わる点に注意。", "jp": "In the school I entered in America, I hardly knew anybody apart from my host sister.", "hint": "apart ___", "audio": {"file": "f3", "start": 84.01, "end": 88.828}}, {"id": "D14", "sec": "D", "sent": 58, "q": "来週始まる期末試験に備えて、今一生懸命勉強中だ。\n→ Right now I'm studying hard ____ ____ ____ the term exams, which begin next week.", "a": "in preparation for", "n": "in preparation for「〜の準備として」。", "jp": "Right now I'm studying hard in preparation for the term exams, which begin next week.", "hint": "in preparation ___", "audio": {"file": "f3", "start": 95.127, "end": 99.535}}, {"id": "D15", "sec": "D", "sent": 60, "q": "ものごとは常に思い通りに進むとは限らない、と経験が教えてくれる。\n→ Experience tells me that things do ____ ____ go the way you want them to.", "a": "not always", "n": "not always「常に〜とは限らない」部分否定。always not（全否定）との違いに注意。", "jp": "Experience tells me that things do not always go the way you want them to.", "hint": "not ___", "audio": {"file": "f4", "start": 0.0, "end": 4.441}}, {"id": "A16", "sec": "A", "sent": 13, "q": "Many scientists today are ____ ____ AI technology to make our lives better.", "opts": ["working on", "working out", "working up", "working over"], "a": "working on", "n": "work on「〜に取り組む」。working out「解決する・運動する」、working up「高める・興奮させる」、working over「徹底的にやる」と区別。", "jp": "今日多くの科学者が私たちの生活をよりよくするためにAI技術に取り組んでいる。", "audio": {"file": "f1", "start": 57.22, "end": 61.138}}];
+const ST={qs:[],cur:0,done:false,sc:{A:0,B:0,C:0,D:0},ok:0,ng:0,t0:Date.now()};
+let _qtimer=null,_qsec=30;
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];}return a;}
+let _ae={};
+function getAud(k){if(!_ae[k])_ae[k]=new Audio(MP3[k]);return _ae[k];}
+let _ca=null;
+function playClip(f,s,e){if(_ca)_ca.pause();const a=getAud(f);if(!a)return;a.currentTime=s;a.play();_ca=a;const st=()=>{if(a.currentTime>=e){a.pause();a.removeEventListener('timeupdate',st);}};a.addEventListener('timeupdate',st);}
+function init(){
+  const p={};['A','B','C','D'].forEach(s=>p[s]=shuffle(POOL.filter(q=>q.sec===s)).slice(0,5));
+  ST.qs=shuffle([...p.A,...p.B,...p.C,...p.D]);
+  ST.cur=0;ST.done=false;ST.sc={A:0,B:0,C:0,D:0};ST.ok=0;ST.ng=0;ST.t0=Date.now();
+  document.getElementById('pf').style.width='0%';updateHdr();render();
+}
+function updateHdr(){
+  const q=ST.qs[ST.cur];
+  ['A','B','C','D'].forEach(s=>{const t=document.getElementById('tab-'+s);t.className='tab '+s+(q&&q.sec===s?' active':'');});
+  document.getElementById('sc-ok').textContent=ST.ok;
+  document.getElementById('sc-ng').textContent=ST.ng;
+  document.getElementById('sc-pos').textContent=(ST.cur<20?ST.cur+1:20)+'/20\u554f';
+  document.getElementById('pf').style.width=(Math.min(ST.cur,20)/20*100)+'%';
+}
+function startQTimer(q){
+  stopQTimer();if(q.sec==='A')return;
+  _qsec=30;updateQTimerUI(30);
+  _qtimer=setInterval(()=>{
+    _qsec--;updateQTimerUI(_qsec);
+    if(_qsec<=0){stopQTimer();if(!ST.done){ST.done=true;ST.ng++;const q2=ST.qs[ST.cur];const i=document.getElementById('ai');if(i){i.disabled=true;i.classList.add('ng');}const sb=document.getElementById('sb');if(sb)sb.disabled=true;showFB(false,q2,true);}}
+  },1000);
+}
+function stopQTimer(){clearInterval(_qtimer);_qtimer=null;}
+function updateQTimerUI(sec){
+  const bar=document.getElementById('qtbar'),num=document.getElementById('qtnum');if(!bar||!num)return;
+  bar.style.width=(sec/30*100)+'%';num.textContent=sec+'s';
+  const c=sec<=5?'danger':sec<=10?'warn':'';
+  bar.className='qtimer-bar'+(c?' '+c:'');num.className='qtimer-num'+(c?' '+c:'');
+}
+const STYPE={A:'4\u62e9 | \u53e5\u52d5\u8a5e\u9078\u629e',B:'\u53e5\u52d5\u8a5e | \u9023\u8a9e\u88dc\u5145',C:'\u53e5\u52d5\u8a5e | \u8a00\u3044\u63db\u3048',D:'\u53e5\u52d5\u8a5e | \u548c\u2192\u82f1'};
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function eA(s){return String(s).replace(/'/g,'&#39;');}
+function bfy(s){return esc(s).replace(/____/g,'<span class="blank">\u2003\u2003\u2003\u2003\u2003\u2003</span>');}
+function render(){
+  if(ST.cur>=20){stopQTimer();renderResult();return;}
+  const q=ST.qs[ST.cur];ST.done=false;updateHdr();
+  const au=q.audio;
+  const abtn=`<button class="abtn" onclick="playClip('${au.file}',${au.start},${au.end})"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>\u25b6 \u4f8b\u6587\u3092\u8074\u304f</button>`;
+  let qtxt='';
+  if(q.sec==='D'){
+    const SEP='\n\u2192 ';const idx=q.q.indexOf(SEP);
+    const jpP=idx>=0?q.q.substring(0,idx):q.q;
+    const enP=idx>=0?q.q.substring(idx+SEP.length):'';
+    qtxt=`<div class="qtext-jp">${esc(jpP)}</div><div class="qtext-en">\u2192 ${bfy(enP)}</div>`;
+  } else if(q.sec==='C'){
+    const lines=q.q.split('\n');
+    qtxt=`<div class="qtext">${lines.map(l=>bfy(l)).join('<br>')}</div>`;
+  } else {
+    qtxt=`<div class="qtext">${bfy(q.q)}</div>`;
+  }
+  const guide=(q.sec==='B')?`<div class="qtext-guide">\ud83d\udcdd ${esc(q.jp)}</div>`:'';
+  const timerBar=(q.sec!=='A')?`<div class="qtimer-wrap"><div class="qtimer-bar-bg"><div class="qtimer-bar" id="qtbar" style="width:100%"></div></div><div class="qtimer-num" id="qtnum">30s</div></div>`:'';
+  let inp='';
+  if(q.sec==='A'){
+    const opts=shuffle([...q.opts]);
+    inp=`<div class="choices">${opts.map((o,i)=>`<button class="cbtn" onclick="pick(this,'${eA(o)}')" data-v="${eA(o)}"><span class="lbl">${['\u2460','\u2461','\u2462','\u2463'][i]}</span>${esc(o)}</button>`).join('')}</div>`;
+  } else {
+    const hp=(q.hint&&q.hint.trim())?`<button class="hbtn" id="hbtn" onclick="showHint()">\ud83d\udca1 \u30d2\u30f3\u30c8\u3092\u898b\u308b</button><div class="hbox" id="hbox">\u30d2\u30f3\u30c8: ${esc(q.hint)}</div>`:'';
+    inp=`<div class="iarea">${timerBar}<div class="irow"><input class="tinput" id="ai" placeholder="\u7b54\u3048\u3092\u5165\u529b\u2026" onkeydown="if(event.key==='Enter')sub()"><button class="sbtn" id="sb" onclick="sub()">\u78ba\u8a8d</button></div>${hp}</div>`;
+  }
+  document.getElementById('main').innerHTML=
+    `<div class="qcard"><div class="qmeta"><span class="qnum-badge ${q.sec}">Q${ST.cur+1}/20</span>`+
+    `<span class="qtype-lbl">${STYPE[q.sec]}</span></div>${qtxt}${guide}${abtn}${inp}`+
+    `<div class="fb" id="fb"></div><button class="nxtbtn" id="nb" onclick="nxt()">\u6b21\u306e\u554f\u984c \u2192</button></div>`;
+  if(q.sec!=='A'){const i=document.getElementById('ai');if(i)setTimeout(()=>i.focus(),80);if(q.hint&&q.hint.trim()){const h=document.getElementById('hbtn');if(h)h.style.display='block';}setTimeout(()=>startQTimer(q),100);}
+}
+function showHint(){const b=document.getElementById('hbtn'),h=document.getElementById('hbox');if(b)b.style.display='none';if(h)h.style.display='block';}
+function pick(btn,sel){
+  if(ST.done)return;ST.done=true;const q=ST.qs[ST.cur];
+  document.querySelectorAll('.cbtn').forEach(b=>{b.disabled=true;if(b.dataset.v===q.a)b.classList.add('ok');});
+  const ok=(sel===q.a);btn.classList.remove('ok');btn.classList.add(ok?'ok':'ng');
+  if(ok){ST.sc[q.sec]++;ST.ok++;}else ST.ng++;showFB(ok,q);
+}
+function norm(s){return s.trim().toLowerCase().replace(/[\u3000\s]+/g,' ').replace(/[\uff01-\uff5e]/g,c=>String.fromCharCode(c.charCodeAt(0)-0xFEE0)).replace(/[.,!?\u3002\u3001\u2026\/]/g,'').trim();}
+function checkAns(input,q){const ni=norm(input);if(ni===norm(q.a))return true;if(q.alts&&q.alts.length&&q.alts.some(alt=>norm(alt)===ni))return true;return false;}
+function sub(){
+  if(ST.done)return;const i=document.getElementById('ai');if(!i||!i.value.trim())return;
+  stopQTimer();ST.done=true;const q=ST.qs[ST.cur];const ok=checkAns(i.value,q);
+  i.disabled=true;i.classList.add(ok?'ok':'ng');const sb=document.getElementById('sb');if(sb)sb.disabled=true;
+  if(ok){ST.sc[q.sec]++;ST.ok++;}else ST.ng++;showFB(ok,q);
+}
+function showFB(ok,q,timeout=false){
+  if(ok)playClip(q.audio.file,q.audio.start,q.audio.end);
+  const fb=document.getElementById('fb');fb.className='fb '+(ok?'ok':'ng');fb.style.display='block';
+  const mk=ok?'\u2713 \u6b63\u89e3':(timeout?'\u23f0 \u6642\u9593\u5207\u308c':'\u2717 \u4e0d\u6b63\u89e3');
+  const ansDisp=q.alts&&q.alts.length?[q.a,...q.alts].join(' / '):q.a;
+  fb.innerHTML=
+    `<div class="fb-tabs"><div class="fbtab active" id="ft-ans" onclick="fbTab('ans')">\u6b63\u89e3\u3068\u89e3\u8aac</div>`+
+    `<div class="fbtab" id="ft-jp" onclick="fbTab('jp')">\u4f8b\u6587\u30fb\u65e5\u672c\u8a9e\u8a33</div></div>`+
+    `<div class="fbc show" id="fc-ans"><div class="fb-ans-row">${mk}\u3000\u6b63\u89e3\uff1a<span class="fb-ans">${esc(ansDisp)}</span></div><div class="fb-note">${esc(q.n)}</div></div>`+
+    `<div class="fbc" id="fc-jp"><div class="fb-jp">${esc(q.jp)}</div></div>`;
+  document.getElementById('nb').style.display='block';
+  document.getElementById('sc-ok').textContent=ST.ok;document.getElementById('sc-ng').textContent=ST.ng;
+}
+function fbTab(t){['ans','jp'].forEach(x=>{document.getElementById('ft-'+x).classList.toggle('active',x===t);document.getElementById('fc-'+x).classList.toggle('show',x===t);});}
+function nxt(){stopQTimer();ST.cur++;ST.done=false;render();}
+function renderResult(){
+  document.getElementById('pf').style.width='100%';document.getElementById('sc-pos').textContent='\u5b8c\u4e86\uff01';
+  const e=Math.floor((Date.now()-ST.t0)/1000),mm=String(Math.floor(e/60)).padStart(2,'0'),ss=String(e%60).padStart(2,'0');
+  document.getElementById('main').innerHTML=
+    `<div class="scard"><div class="sbig">${ST.ok}</div><div class="slbl">/ 20\u554f\u6b63\u89e3 &nbsp;\u23f1 ${mm}:${ss}</div>`+
+    `<div class="ssecs"><div class="ssec A"><div class="sn">Section A<br>4\u62e9</div><div class="sv">${ST.sc.A}/5</div></div>`+
+    `<div class="ssec B"><div class="sn">Section B<br>\u9023\u8a9e\u88dc\u5145</div><div class="sv">${ST.sc.B}/5</div></div>`+
+    `<div class="ssec C"><div class="sn">Section C<br>\u8a00\u3044\u63db\u3048</div><div class="sv">${ST.sc.C}/5</div></div>`+
+    `<div class="ssec D"><div class="sn">Section D<br>\u548c\u2192\u82f1</div><div class="sv">${ST.sc.D}/5</div></div></div>`+
+    `<button class="rbtn p" onclick="init()">\ud83d\udd00 \u5225\u306e20\u554f\u306b\u6311\u6226</button>`+
+    `<button class="rbtn s" onclick="init()">\u3082\u3046\u4e00\u5ea6</button></div>`;
+}
+setInterval(()=>{if(ST.cur<20){const e=Math.floor((Date.now()-ST.t0)/1000);document.getElementById('tmr').textContent=Math.floor(e/60)+':'+(e%60<10?'0':'')+(e%60);}},1000);
+init();
+</script>
+</body>
+</html>
