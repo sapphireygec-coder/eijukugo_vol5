@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英熟語ターゲット1000 確認テスト（ランダム）</title>
+<!-- 制限時間：25分00秒（1問30秒×50問） -->
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;background:#1a1a1a;color:#e8e8e8;font-size:15px;line-height:1.7;}
+.page{max-width:760px;margin:0 auto;padding:1.5rem 1rem 4rem;}
+h1{font-size:20px;font-weight:600;margin-bottom:4px;color:#f0f0f0;}
+.subtitle{font-size:13px;color:#aaa;margin-bottom:1.25rem;}
+.set-badge{display:inline-block;font-size:12px;background:#1e3a5f;border:1px solid #3b6fa0;color:#93c5fd;border-radius:6px;padding:2px 10px;margin-bottom:1rem;}
+
+/* TOP BAR */
+.top-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:12px 16px;background:#2a2a2a;border:1px solid #3a3a3a;border-radius:12px;margin-bottom:.75rem;}
+.timer-block{display:flex;align-items:center;gap:10px;}
+.timer-lbl{font-size:12px;color:#888;}
+.timer-disp{font-size:26px;font-weight:600;color:#f0f0f0;font-variant-numeric:tabular-nums;min-width:84px;}
+.timer-disp.warn{color:#fbbf24;}.timer-disp.danger{color:#f87171;}
+.tbtn{padding:6px 16px;font-size:13px;border:1px solid #555;border-radius:8px;background:#333;color:#e8e8e8;cursor:pointer;font-family:inherit;}
+.tbtn:hover{background:#444;}.tbtn:disabled{color:#666;cursor:default;}
+.chips{display:flex;gap:8px;flex-wrap:wrap;}
+.chip{background:#2a2a2a;border:1px solid #3a3a3a;border-radius:8px;padding:5px 12px;font-size:13px;color:#aaa;}
+.chip span{font-weight:600;color:#f0f0f0;}
+
+/* PROGRESS */
+.prog-wrap{height:5px;background:#333;border-radius:3px;margin-bottom:1rem;}
+.prog-fill{height:5px;border-radius:3px;background:#22c55e;transition:width 1s linear;}
+.prog-fill.warn{background:#fbbf24;}.prog-fill.danger{background:#f87171;}
+
+.timeout-banner{display:none;background:#3b1a1a;border:1px solid #7f1d1d;border-radius:8px;padding:10px 14px;font-size:13px;color:#fca5a5;font-weight:600;margin-bottom:1rem;text-align:center;}
+
+/* SECTION */
+.sec-title{font-size:15px;font-weight:600;color:#f0f0f0;margin:1.75rem 0 .5rem;padding-bottom:6px;border-bottom:2px solid #555;}
+.sec-note{font-size:12px;color:#888;margin-bottom:.75rem;}
+
+/* QUESTION */
+.qb{margin-bottom:1rem;padding:14px 16px;background:#242424;border:1px solid #333;border-radius:10px;}
+.qb:hover{border-color:#555;}
+.qn{font-size:12px;color:#777;margin-bottom:5px;}
+.qs{font-size:15px;font-family:'Times New Roman','Georgia',serif;color:#e8e8e8;margin-bottom:10px;line-height:1.9;}
+.qs u{text-decoration:underline;text-decoration-color:#60a5fa;text-underline-offset:3px;}
+.jp-text{font-size:13px;font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;color:#aaa;margin-bottom:6px;}
+
+/* CHOICES */
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+@media(max-width:480px){.choices{grid-template-columns:1fr;}}
+.cb{text-align:left;padding:8px 12px;font-size:13px;border:1px solid #3a3a3a;border-radius:8px;background:#2e2e2e;color:#e8e8e8;cursor:pointer;font-family:inherit;transition:background .1s;}
+.cb:hover:not(:disabled){background:#383838;border-color:#555;}
+.cb.correct{background:#14532d;border-color:#22c55e;color:#86efac;}
+.cb.wrong{background:#450a0a;border-color:#f87171;color:#fca5a5;}
+.cb:disabled{cursor:default;}
+
+/* INPUT */
+.ia{width:100%;padding:7px 11px;font-size:14px;font-family:'Times New Roman','Georgia',serif;border:1px solid #3a3a3a;border-radius:8px;background:#2e2e2e;color:#e8e8e8;margin-top:6px;}
+.ia:focus{outline:none;border-color:#60a5fa;background:#333;}
+.ia.ok{border-color:#22c55e;background:#14532d;color:#86efac;}
+.ia.ng{border-color:#f87171;background:#450a0a;color:#fca5a5;}
+.fb{font-size:12px;margin-top:5px;min-height:18px;}
+.fb.ok{color:#4ade80;}.fb.ng{color:#f87171;}
+.ckbtn{margin-top:8px;padding:5px 16px;font-size:13px;border:1px solid #555;border-radius:8px;background:#333;color:#e8e8e8;cursor:pointer;font-family:inherit;}
+.ckbtn:hover{background:#444;}
+
+/* BTN ROW */
+.btn-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:1.75rem;}
+.btn-main{padding:10px 28px;font-size:14px;font-weight:600;border:1px solid #555;border-radius:10px;background:#2e2e2e;color:#e8e8e8;cursor:pointer;font-family:inherit;}
+.btn-main:hover{background:#383838;}
+.btn-green{background:#14532d;border-color:#22c55e;color:#86efac;}
+.btn-green:hover{background:#166534;}
+.btn-blue{background:#1e3a5f;border-color:#3b6fa0;color:#93c5fd;}
+.btn-blue:hover{background:#1e40af;}
+.btn-orange{background:#431407;border-color:#c2410c;color:#fdba74;}
+.btn-orange:hover{background:#7c2d12;}
+
+/* RESULT */
+.result-box{margin-top:1.75rem;padding:24px;background:#242424;border-radius:14px;border:1px solid #333;text-align:center;}
+.result-box .big{font-size:36px;font-weight:700;color:#f0f0f0;}
+.rank-badge{font-size:28px;font-weight:700;margin:10px 0 6px;letter-spacing:2px;}
+.rank-awesome{color:#fbbf24;text-shadow:0 0 12px rgba(251,191,36,0.5);}
+.rank-excellent{color:#60a5fa;text-shadow:0 0 12px rgba(96,165,250,0.4);}
+.rank-great{color:#4ade80;}
+.rank-good{color:#a78bfa;}
+.rank-keep{color:#f9a8d4;}
+.rank-try{color:#aaa;}
+.result-box .sub{font-size:14px;color:#ccc;margin-top:4px;line-height:1.8;}
+.invite-msg{font-size:13px;color:#fbbf24;margin-top:10px;padding:10px 16px;background:#2a2200;border:1px solid #854d0e;border-radius:8px;line-height:1.8;}
+.result-box .elapsed{font-size:13px;color:#777;margin-top:10px;}
+
+/* HISTORY */
+.history-box{margin-top:1.5rem;padding:18px;background:#242424;border-radius:12px;border:1px solid #333;}
+.history-title{font-size:14px;font-weight:600;margin-bottom:10px;color:#f0f0f0;}
+.history-table{width:100%;border-collapse:collapse;font-size:13px;}
+.history-table th{text-align:left;color:#777;font-weight:400;padding:4px 8px;border-bottom:1px solid #333;}
+.history-table td{padding:7px 8px;border-bottom:1px solid #2e2e2e;color:#e8e8e8;}
+.history-table tr:last-child td{border-bottom:none;}
+.copy-lbl{font-size:12px;color:#777;margin-top:12px;margin-bottom:4px;}
+.copy-box{padding:10px;background:#1a1a1a;border:1px solid #333;border-radius:8px;font-size:12px;color:#aaa;white-space:pre-wrap;word-break:break-all;max-height:140px;overflow-y:auto;font-family:monospace;}
+.copy-note{font-size:11px;color:#666;margin-top:4px;}
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>英熟語ターゲット1000　確認テスト</h1>
+  <p class="subtitle">全50問　⑴4択×10問　⑵前置詞記述×15問　⑶句動詞書き換え×15問　⑷語群選択×10問　制限時間：25分00秒（1問30秒）</p>
+  <div class="set-badge" id="set-badge">問題セット #1</div>
+
+  <div class="top-bar">
+    <div class="timer-block">
+      <div>
+        <div class="timer-lbl">残り時間</div>
+        <div class="timer-disp" id="tdisp">25:00</div>
+      </div>
+      <button class="tbtn" id="start-btn" onclick="startTimer()">スタート</button>
+    </div>
+    <div class="chips">
+      <div class="chip">正解 <span id="correct-count">0</span></div>
+      <div class="chip">回答済み <span id="answered-count">0</span> / 50</div>
+    </div>
+  </div>
+
+  <div class="prog-wrap"><div class="prog-fill" id="prog" style="width:100%"></div></div>
+  <div class="timeout-banner" id="timeout-banner">⏰ 時間切れ！自動採点しました。</div>
+
+  <div id="test-content"></div>
+
+  <div class="btn-row">
+    <button class="btn-main" onclick="submitAll()">採点する</button>
+    <button class="btn-main btn-blue" onclick="retryTest(false)">リトライ（同じ問題）↺</button>
+    <button class="btn-main btn-orange" onclick="retryTest(true)">新しい問題セット ⟳</button>
+  </div>
+
+  <div id="result-box" style="display:none" class="result-box">
+    <div class="big" id="final-score"></div>
+    <div class="rank-badge" id="rank-badge"></div>
+    <div class="sub" id="final-sub"></div>
+    <div class="invite-msg" id="invite-msg"></div>
+    <div class="elapsed" id="elapsed"></div>
+    <div class="btn-row" style="margin-top:1rem;">
+      <button class="btn-main btn-green" onclick="saveResult()">結果を保存・コピー</button>
+      <button class="btn-main btn-blue" onclick="retryTest(false)">リトライ（同じ問題）↺</button>
+      <button class="btn-main btn-orange" onclick="retryTest(true)">新しい問題セット ⟳</button>
+    </div>
+  </div>
+
+  <div id="history-box" style="display:none" class="history-box">
+    <div class="history-title">📋 成績履歴</div>
+    <table class="history-table">
+      <thead><tr><th>回</th><th>セット</th><th>得点</th><th>正答率</th><th>所要時間</th><th>日時</th></tr></thead>
+      <tbody id="history-body"></tbody>
+    </table>
+    <div class="copy-lbl">コピー用テキスト</div>
+    <div class="copy-box" id="copy-box"></div>
+    <p class="copy-note">※ テキストをクリックして全選択（Ctrl+A）→コピー（Ctrl+C）でメモ帳等に貼り付けできます。</p>
+    <div class="btn-row" style="margin-top:10px;">
+      <button class="btn-main" style="font-size:13px;padding:6px 18px;" onclick="copyText()">クリップボードにコピー</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =====================================================
+   問題プール
+   ===================================================== */
+
+/* ⑴ 4択問題プール（20問） */
+const pool_mc = [
+  {sent:'Technology continues to impact the way people communicate with <u>each other</u>.', answer:0, choices:['ア　お互いに','イ　それぞれが','ウ　他の人に','エ　一人ずつ']},
+  {sent:'My father says he wants to <u>carry on</u> working past his retirement age.', answer:2, choices:['ア　やめる','イ　始める','ウ　続ける','エ　考える']},
+  {sent:'Modern society should make every effort to <u>do away with</u> racial discrimination.', answer:1, choices:['ア　広める','イ　廃止する・なくす','ウ　守る','エ　調べる']},
+  {sent:'My grandmother <u>passed away</u> at age 97, surviving her husband by 15 years.', answer:0, choices:['ア　亡くなった','イ　旅に出た','ウ　退院した','エ　引退した']},
+  {sent:'<u>All of a sudden</u>, the electricity went out, and we were left in the dark.', answer:3, choices:['ア　やっと','イ　ゆっくりと','ウ　当然のことながら','エ　突然']},
+  {sent:'In most cases, when a language is gone, it is gone <u>for good</u>.', answer:2, choices:['ア　いつかは','イ　とりあえず','ウ　永久に','エ　ほぼ確実に']},
+  {sent:'The situation is extremely serious and <u>calls for</u> immediate action.', answer:1, choices:['ア　妨げる','イ　必要とする','ウ　示す','エ　否定する']},
+  {sent:'During the last recession, even the big companies were forced to <u>lay off</u> thousands of workers.', answer:0, choices:['ア　一時解雇する','イ　採用する','ウ　昇進させる','エ　転勤させる']},
+  {sent:'It suddenly <u>dawned on me</u> that these islands could be covered by the constantly rising sea.', answer:3, choices:['ア　私が証明した','イ　私が心配した','ウ　私が計画した','エ　私にわかり始めた']},
+  {sent:'The project team was disappointed to hear that their proposal was <u>turned down</u>.', answer:2, choices:['ア　採用された','イ　延期された','ウ　却下された','エ　修正された']},
+  {sent:'She has <u>gotten over</u> her fear of heights now.', answer:1, choices:['ア　強まった','イ　克服した','ウ　忘れた','エ　増やした']},
+  {sent:'We\'ve used this dishwasher for many years, and <u>for the most part</u> it\'s worked very well.', answer:0, choices:['ア　大体は','イ　最初は','ウ　時々','エ　永久に']},
+  {sent:'My mother has a lot of faults, but I love her <u>all the same</u>.', answer:2, choices:['ア　まったく同じように','イ　同時に','ウ　それでもやはり','エ　全員一緒に']},
+  {sent:'I made that harsh comment <u>on purpose</u> to see how he\'d respond.', answer:3, choices:['ア　偶然に','イ　最初に','ウ　突然に','エ　わざと']},
+  {sent:'Late last night, I read a letter from her <u>over and over</u>.', answer:1, choices:['ア　急いで','イ　何度も繰り返し','ウ　大声で','エ　一人で']},
+  {sent:'She went out to buy some office supplies, so she should be back <u>before long</u>.', answer:0, choices:['ア　間もなく','イ　ずっと前から','ウ　長い間','エ　もう少し後で']},
+  {sent:'<u>By degrees</u>, he began to feel at home in the new environment.', answer:2, choices:['ア　突然','イ　永久に','ウ　徐々に','エ　公式に']},
+  {sent:'Tom was unable to <u>come up with</u> a good excuse for being late.', answer:1, choices:['ア　受け入れる','イ　思いつく','ウ　断る','エ　調べる']},
+  {sent:'I believe more changes will <u>come about</u> in our way of life owing to global warming.', answer:3, choices:['ア　消える','イ　増える','ウ　始まる','エ　起こる']},
+  {sent:'These newly developed fibers are very economical and easy to <u>come by</u>.', answer:2, choices:['ア　作る','イ　売る','ウ　手に入れる','エ　運ぶ']},
+];
+
+/* ⑵ 前置詞記述プール（25問） */
+const pool_prep = [
+  {sent:'She resembles her mother so much ( &nbsp;&nbsp; ) they are often mistaken for each other.', blank:'that', hint:'so〜that構文'},
+  {sent:'Kento is a fluent speaker of Chinese as well ( &nbsp;&nbsp; ) English.', blank:'as', hint:'as well as〜'},
+  {sent:'Recycling things is not only environmentally friendly but ( &nbsp;&nbsp; ) economically sound.', blank:'also', hint:'not only A but also B'},
+  {sent:"I'm feeling as ( &nbsp;&nbsp; ) I'm still in a different time zone.", blank:'if', hint:'as if 〜'},
+  {sent:'Old friends send me e-mails every once ( &nbsp;&nbsp; ) a while.', blank:'in', hint:'every once in a while'},
+  {sent:"Mr. Yamada appeared on TV in connection ( &nbsp;&nbsp; ) Japan's health care system.", blank:'with', hint:'in connection with'},
+  {sent:"I'm planning to apply ( &nbsp;&nbsp; ) internet banking services.", blank:'for', hint:'apply for 〜を申し込む'},
+  {sent:'This research does not apply ( &nbsp;&nbsp; ) people under 40.', blank:'to', hint:'apply to 〜に当てはまる'},
+  {sent:'I could not catch up ( &nbsp;&nbsp; ) him, as he was running too fast.', blank:'with', hint:'catch up with'},
+  {sent:'His explanation does not correspond ( &nbsp;&nbsp; ) what actually happened.', blank:'to', hint:'correspond to 〜と一致する'},
+  {sent:'Water good to drink must be free ( &nbsp;&nbsp; ) harmful substances.', blank:'of', hint:'free of 〜を含まない'},
+  {sent:'Homesickness is very familiar ( &nbsp;&nbsp; ) anyone who has lived abroad.', blank:'to', hint:'be familiar to 〜になじみがある'},
+  {sent:'This train is bound ( &nbsp;&nbsp; ) San Francisco.', blank:'for', hint:'be bound for 〜行き'},
+  {sent:'The patient was very anxious ( &nbsp;&nbsp; ) know if the doctor saw any sign of cancer.', blank:'to', hint:'be anxious to do 〜したがっている'},
+  {sent:'People are always anxious ( &nbsp;&nbsp; ) the possibility of another big earthquake.', blank:'about', hint:'be anxious about 〜を心配している'},
+  {sent:"If you're concerned ( &nbsp;&nbsp; ) your health problem, you should arrange for a medical checkup.", blank:'about', hint:'be concerned about 〜を心配する'},
+  {sent:'This book raises discussions on wide issues concerned ( &nbsp;&nbsp; ) gender equality.', blank:'with', hint:'be concerned with 〜に関係している'},
+  {sent:'Those who attended the meeting all agreed ( &nbsp;&nbsp; ) the proposal.', blank:'to', hint:'agree to 〜（提案）に同意する'},
+  {sent:'She wanted me to agree ( &nbsp;&nbsp; ) her point of view.', blank:'with', hint:'agree with 〜（人・意見）に同意する'},
+  {sent:'We need to make constant efforts to keep pace ( &nbsp;&nbsp; ) what\'s happening in the world.', blank:'with', hint:'keep pace with 〜に遅れずついていく'},
+  {sent:'I think Sakamoto Ryoma was true ( &nbsp;&nbsp; ) his philosophy all his life.', blank:'to', hint:'be true to 〜に忠実である'},
+  {sent:"I'm very tired ( &nbsp;&nbsp; ) working all day and want to take a good rest.", blank:'from', hint:'be tired from 〜で疲れている'},
+  {sent:"I'm really tired ( &nbsp;&nbsp; ) having the same thing for lunch every day.", blank:'of', hint:'be tired of 〜に飽き飽きしている'},
+  {sent:'We began to get on board the plane half an hour ( &nbsp;&nbsp; ) its scheduled takeoff.', blank:'before', hint:'before 〜の前に'},
+  {sent:'Most Americans are familiar ( &nbsp;&nbsp; ) the Gettysburg Address by Abraham Lincoln.', blank:'with', hint:'be familiar with 〜をよく知っている'},
+];
+
+/* ⑶ 句動詞記述プール（25問）
+   形式：英文中の下線付き動詞1語を、同じ意味の句動詞に書き換える。
+   sent = 表示する英文（下線語は <u> タグ）
+   original = 下線の動詞（表示用）
+   target = 書き換え後の句動詞（正解）
+   jp = 日本語訳（参考表示）
+*/
+const pool_pv = [
+  {
+    sent:'The scheduled football game had to be <u>canceled</u> because of the bad weather.',
+    original:'canceled', target:'called off',
+    jp:'悪天候のため、予定していたフットボールの試合は中止されなければならなかった。'
+  },
+  {
+    sent:'Please <u>submit</u> your report by Friday.',
+    original:'submit', target:'hand in / turn in',
+    jp:'金曜日までにレポートを提出してください。'
+  },
+  {
+    sent:'The police started to <u>investigate</u> the cause of the accident more carefully.',
+    original:'investigate', target:'look into',
+    jp:'警察はより慎重に事故の原因を調べ始めた。'
+  },
+  {
+    sent:'Jason decided to <u>postpone</u> taking his summer vacation because he was too busy at work.',
+    original:'postpone', target:'put off',
+    jp:'ジェイソンは仕事があまりにも忙しかったので、夏休みをとるのを延期すると決めた。'
+  },
+  {
+    sent:'My father was <u>raised</u> by his grandparents after his parents passed away.',
+    original:'raised', target:'brought up',
+    jp:'私の父は両親が亡くなった後、祖父母に育てられた。'
+  },
+  {
+    sent:'He <u>rejected</u> my proposal without giving any explanation.',
+    original:'rejected', target:'turned down',
+    jp:'彼は何の説明もなく私の提案を断った。'
+  },
+  {
+    sent:'My father says he wants to <u>continue</u> working past his retirement age.',
+    original:'continue', target:'carry on',
+    jp:'私の父は定年を過ぎても働き続けたいと言っている。'
+  },
+  {
+    sent:'The clerk was kind enough to <u>check</u> the papers for me before I sent them off.',
+    original:'check', target:'look over',
+    jp:'その職員は私が書類を送る前に親切にもそれらをざっと調べてくれた。'
+  },
+  {
+    sent:'We need to <u>abolish</u> this outdated rule as soon as possible.',
+    original:'abolish', target:'do away with',
+    jp:'私たちはこの時代遅れのルールをできるだけ早くなくす必要がある。'
+  },
+  {
+    sent:'I could not <u>reach</u> him, as he was running too fast.',
+    original:'reach', target:'catch up with',
+    jp:'彼があまりにも速く走っていたので、私は彼に追いつくことができなかった。'
+  },
+  {
+    sent:'I <u>encountered</u> an old friend from junior high at the supermarket yesterday.',
+    original:'encountered', target:'ran into',
+    jp:'昨日スーパーで中学の旧友に偶然出会った。'
+  },
+  {
+    sent:'She <u>overcame</u> her fear of heights and now enjoys rock climbing.',
+    original:'overcame', target:'got over',
+    jp:'彼女は高所恐怖症を克服し、今ではロッククライミングを楽しんでいる。'
+  },
+  {
+    sent:'We need to <u>tolerate</u> many inconveniences when we go abroad.',
+    original:'tolerate', target:'put up with',
+    jp:'外国へ行くと、我慢しなければならない不便なことがたくさんある。'
+  },
+  {
+    sent:'The firefighters finally <u>extinguished</u> the forest fire after hours of effort.',
+    original:'extinguished', target:'put out',
+    jp:'消防士たちは何時間もの努力の末、ついに森林火災を消し止めた。'
+  },
+  {
+    sent:'Tom was unable to <u>think of</u> a good excuse for being late to class again.',
+    original:'think of', target:'come up with',
+    jp:'トムはまた授業に遅れ、そのことについてうまい言い訳を思いつくことができなかった。'
+  },
+  {
+    sent:'I believe more changes will <u>happen</u> in our way of life owing to global warming.',
+    original:'happen', target:'come about',
+    jp:'地球温暖化のために私たちの生活様式により多くの変化が起こるだろうと私は信じている。'
+  },
+  {
+    sent:'These newly developed fibers are very economical and easy to <u>obtain</u>.',
+    original:'obtain', target:'come by',
+    jp:'この新たに開発された繊維はとても経済的で、手に入れるのが簡単だ。'
+  },
+  {
+    sent:"My mother has a lot of faults, but I love her <u>nevertheless</u>.",
+    original:'nevertheless', target:'all the same',
+    jp:'私の母にはたくさんの欠点があるが、それでもやはり私は母のことを愛している。'
+  },
+  {
+    sent:'She went out a few minutes ago, so she should be back <u>soon</u>.',
+    original:'soon', target:'before long',
+    jp:'彼女は数分前に出かけたので、間もなく戻ってくるだろう。'
+  },
+  {
+    sent:'It is important to <u>respect</u> yourself whatever job you choose.',
+    original:'respect', target:'take pride in',
+    jp:'どんな仕事を選んでも、自分の仕事に誇りを持つことが大切だ。'
+  },
+  {
+    sent:'We need to <u>endure</u> temporary hardship to achieve our goal.',
+    original:'endure', target:'put up with',
+    jp:'目標を達成するためには一時的な苦労を我慢する必要がある。'
+  },
+  {
+    sent:"If you're planning to visit Kyoto in the fall, you should book your hotel <u>beforehand</u>.",
+    original:'beforehand', target:'in advance',
+    jp:'もし秋に京都を訪れる計画を立てているのなら、前もってホテルを予約すべきだ。'
+  },
+  {
+    sent:'We must <u>eliminate</u> racial discrimination from our society.',
+    original:'eliminate', target:'do away with',
+    jp:'私たちは社会から人種差別をなくさなければならない。'
+  },
+  {
+    sent:'He <u>died</u> at age 97, surviving his wife by 15 years.',
+    original:'died', target:'passed away',
+    jp:'彼は妻より15年長生きして、97歳で亡くなった。'
+  },
+  {
+    sent:'It is not easy to <u>criticize</u> the work of others fairly.',
+    original:'criticize', target:'find fault with',
+    jp:'他人の仕事にけちをつけることは、公平に行うのは簡単ではない。'
+  },
+];
+
+/* ⑷ 語群選択プール（20問） */
+const pool_wc = [
+  {sent:'You should try and take it easy ( &nbsp;&nbsp; ) time to time.', jp:'あなたはときどきのんびりしようとすべきだ。', answer:'from', bank:['from','for','in','at']},
+  {sent:'The protesters succeeded in collecting over 200,000 signatures in ( &nbsp;&nbsp; ) in just a week.', jp:'全部で20万以上の署名を集めるのに成功した。', answer:'all', bank:['all','any','part','most']},
+  {sent:"I made that comment on ( &nbsp;&nbsp; ) to see how he'd respond.", jp:'私はわざとあんな厳しいコメントをした。', answer:'purpose', bank:['purpose','occasion','chance','duty']},
+  {sent:'He is, as it ( &nbsp;&nbsp; ), a grown-up baby.', jp:'彼はいわば大人の子どもだ。', answer:'were', bank:['was','were','is','be']},
+  {sent:'She speaks French, to say ( &nbsp;&nbsp; ) of English.', jp:'彼女は英語はもちろん、フランス語も話す。', answer:'nothing', bank:['nothing','everything','something','anything']},
+  {sent:'She always ( &nbsp;&nbsp; ) her coworkers because she thinks she is better than them.', jp:'彼女はいつも自分が他の人より優れていると思っているので、同僚たちを見下している。', answer:'looks down on', bank:['looks down on','looks up to','gets along with','puts up with']},
+  {sent:"It's too late, so let's do ( &nbsp;&nbsp; ) chicken tonight.", jp:'今夜は鶏肉なしで済ませよう。', answer:'without', bank:['without','with','away','off']},
+  {sent:'I feel at ( &nbsp;&nbsp; ) with this lady.', jp:'私はこの女性といると落ち着く。', answer:'ease', bank:['ease','home','peace','rest']},
+  {sent:'The impact of the economic depression will be ( &nbsp;&nbsp; ) for many years to come.', jp:'経済不況の影響は今後何年にもわたって感じられるだろう。', answer:'felt', bank:['feel','felt','feeling','feels']},
+  {sent:'Doctors recommend we eat what we like but just cut ( &nbsp;&nbsp; ) on quantity.', jp:'好きなものを食べるが量を減らすことが勧められる。', answer:'down', bank:['down','out','off','up']},
+  {sent:'I\'ll be with you, Ken, as ( &nbsp;&nbsp; ) as I\'m done with the dishes.', jp:'ケン、皿洗いを済ませたらすぐにあなたの所へ行くからね。', answer:'soon', bank:['soon','long','well','far']},
+  {sent:'At ( &nbsp;&nbsp; ) I thought he was joking, but soon I realized he was dead serious.', jp:'最初は、私は彼が冗談を言っていると思ったが、すぐに彼は大まじめだとわかった。', answer:'first', bank:['first','last','once','least']},
+  {sent:'It was almost a decade ago that I saw this movie for the ( &nbsp;&nbsp; ) time with my father.', jp:'私が父と初めてこの映画を見たのは10年近く前のことだった。', answer:'first', bank:['first','last','next','same']},
+  {sent:'We couldn\'t reach a decision, so our plans are still up in the ( &nbsp;&nbsp; ).', jp:'結論に達しなかったので、私たちの計画は依然として未決定である。', answer:'air', bank:['air','sky','cloud','wind']},
+  {sent:'Purely by ( &nbsp;&nbsp; ), a friend from junior high and I were volunteering at the same organization.', jp:'まったく偶然に同じ組織でボランティアをしていた。', answer:'chance', bank:['chance','luck','fate','accident']},
+  {sent:'More and more young Japanese scientists today speak English as a matter of ( &nbsp;&nbsp; ).', jp:'今日ではますます多くの若い日本人科学者たちが当然のこととして英語を話す。', answer:'course', bank:['course','fact','time','way']},
+  {sent:'It is indeed a shame that we had ( &nbsp;&nbsp; ) but rain all the while we were staying here.', jp:'私たちがここに滞在している間ずっと雨降りばかりだったのは、本当に残念なことだ。', answer:'nothing', bank:['nothing','anything','something','everything']},
+  {sent:'The boy looked anything ( &nbsp;&nbsp; ) happy in his dirty baseball uniform.', jp:'少年は汚れた野球のユニフォームを着ていて全然うれしそうではなかった。', answer:'but', bank:['but','except','than','like']},
+  {sent:'I know this kind of misunderstanding is ( &nbsp;&nbsp; ) to happen again in the future.', jp:'私はこの種の誤解は将来、きっと再び起きるとわかっている。', answer:'bound', bank:['bound','likely','sure','able']},
+  {sent:'Despite evidence to the ( &nbsp;&nbsp; ), we tend to believe in the accuracy of memories.', jp:'それと反対の証拠があるのに、私たちは記憶の正確さを信じがちだ。', answer:'contrary', bank:['contrary','opposite','reverse','contrast']},
+];
+
+/* =====================================================
+   ランダム抽出
+   ===================================================== */
+function shuffle(arr){ return [...arr].sort(()=>Math.random()-0.5); }
+function pick(arr, n){ return shuffle(arr).slice(0, n); }
+
+let currentMC=[], currentPrep=[], currentPV=[], currentWC=[];
+let setNumber = 0;
+
+function buildNewSet(){
+  setNumber++;
+  currentMC   = pick(pool_mc,   10);
+  currentPrep = pick(pool_prep, 15);
+  currentPV   = pick(pool_pv,   15);
+  currentWC   = pick(pool_wc,   10);
+  document.getElementById('set-badge').textContent = '問題セット #' + setNumber;
+  renderTest();
+}
+
+/* =====================================================
+   タイマー・スコア
+   ===================================================== */
+const TOTAL_SEC = 25*60;
+let remaining=TOTAL_SEC, timerInterval=null, started=false, finished=false, startTime=null;
+let totalCorrect=0;
+const answeredSet=new Set();
+let history=[];
+let attempt=0;
+
+function pad(n){ return String(n).padStart(2,'0'); }
+
+function updateTimerDisplay(){
+  const m=Math.floor(remaining/60), s=remaining%60;
+  const el=document.getElementById('tdisp'), bar=document.getElementById('prog');
+  el.textContent=pad(m)+':'+pad(s);
+  const pct=Math.round(remaining/TOTAL_SEC*100);
+  bar.style.width=pct+'%';
+  if(remaining<=120){ el.className='timer-disp danger'; bar.className='prog-fill danger'; }
+  else if(remaining<=600){ el.className='timer-disp warn'; bar.className='prog-fill warn'; }
+}
+
+function startTimer(){
+  if(started) return;
+  started=true; startTime=Date.now();
+  const sb=document.getElementById('start-btn');
+  sb.textContent='進行中'; sb.disabled=true;
+  timerInterval=setInterval(()=>{
+    remaining--; updateTimerDisplay();
+    if(remaining<=0){ clearInterval(timerInterval); document.getElementById('timeout-banner').style.display='block'; submitAll(true); }
+  },1000);
+}
+
+function updateScore(){
+  document.getElementById('correct-count').textContent=totalCorrect;
+  document.getElementById('answered-count').textContent=answeredSet.size;
+}
+
+/* =====================================================
+   問題レンダリング
+   ===================================================== */
+function renderTest(){
+  const content = document.getElementById('test-content');
+  content.innerHTML='';
+
+  /* ⑴ */
+  let html='<div class="sec-title">⑴　下線部の熟語の意味を選びなさい。</div>';
+  html+='<div class="sec-note">マーク式　各1点 × 10問</div>';
+  currentMC.forEach((d,i)=>{
+    const correctText = d.choices[d.answer];
+    const shuffled = [...d.choices].sort(()=>Math.random()-0.5);
+    const newAnswer = shuffled.indexOf(correctText);
+    const labs=['ア','イ','ウ','エ'];
+    const btns = shuffled.map((c,j)=>`<button class="cb" onclick="markMC(this,${j})">${labs[j]}　${c.slice(2)}</button>`).join('');
+    html+=`<div class="qb" data-answer="${newAnswer}">
+      <div class="qn">問${i+1}</div>
+      <div class="qs">${d.sent}</div>
+      <div class="choices">${btns}</div>
+    </div>`;
+  });
+
+  /* ⑵ */
+  html+='<div class="sec-title">⑵　（　　）に適切な前置詞を書きなさい。</div>';
+  html+='<div class="sec-note">記述式　各1点 × 15問</div>';
+  currentPrep.forEach((d,i)=>{
+    html+=`<div class="qb" data-prep-idx="${i}">
+      <div class="qn">問${10+i+1}</div>
+      <div class="qs">${d.sent}</div>
+      <input class="ia" type="text" placeholder="前置詞・接続詞を入力" id="prep-${i}" autocomplete="off" spellcheck="false">
+      <div class="fb" id="prep-fb-${i}"></div>
+      <button class="ckbtn" onclick="checkPrep(${i})">確認</button>
+    </div>`;
+  });
+
+  /* ⑶ */
+  html+='<div class="sec-title">⑶　下線部の語（句）と同じ意味になるように、句動詞に書き換えなさい。</div>';
+  html+='<div class="sec-note">記述式　各1点 × 15問</div>';
+  currentPV.forEach((d,i)=>{
+    html+=`<div class="qb" data-pv-idx="${i}">
+      <div class="qn">問${25+i+1}</div>
+      <div class="jp-text">${d.jp}</div>
+      <div class="qs">${d.sent}</div>
+      <div style="font-size:12px;color:#777;margin-bottom:4px">下線部「${d.original}」を句動詞に書き換えなさい。</div>
+      <input class="ia" type="text" placeholder="句動詞を入力（例: hand in）" id="pv-${i}" autocomplete="off" spellcheck="false">
+      <div class="fb" id="pv-fb-${i}"></div>
+      <button class="ckbtn" onclick="checkPV(${i})">確認</button>
+    </div>`;
+  });
+
+  /* ⑷ */
+  const labs=['ア','イ','ウ','エ'];
+  html+='<div class="sec-title">⑷　語群から適切な語を選び、必要に応じて形を変えて（　　）に入れなさい。</div>';
+  html+='<div class="sec-note">マーク式　各1点 × 10問</div>';
+  currentWC.forEach((d,i)=>{
+    const shuffledBank = [...d.bank].sort(()=>Math.random()-0.5);
+    const btns = shuffledBank.map((w,j)=>`<button class="cb" onclick="markWC(this,'${w}')">${labs[j]}　${w}</button>`).join('');
+    html+=`<div class="qb" data-wc-answer="${d.answer}">
+      <div class="qn">問${40+i+1}</div>
+      <div class="qs">${d.sent}</div>
+      <div style="font-size:12px;color:#777;margin-bottom:8px">${d.jp}</div>
+      <div class="choices">${btns}</div>
+      <div class="fb" id="wc-fb-${i}"></div>
+    </div>`;
+  });
+
+  content.innerHTML=html;
+}
+
+/* =====================================================
+   採点ロジック
+   ===================================================== */
+function markMC(btn, chosen){
+  const block=btn.closest('.qb');
+  if(block.dataset.done) return; block.dataset.done='1';
+  const correct=parseInt(block.dataset.answer);
+  block.querySelectorAll('.cb').forEach((b,i)=>{
+    b.disabled=true;
+    if(i===correct) b.classList.add('correct');
+    else if(i===chosen && chosen!==correct) b.classList.add('wrong');
+  });
+  answeredSet.add(block);
+  if(chosen===correct) totalCorrect++;
+  updateScore();
+}
+
+function checkPrep(i){
+  const inp=document.getElementById('prep-'+i), fb=document.getElementById('prep-fb-'+i), key='prep-'+i;
+  if(answeredSet.has(key)) return; answeredSet.add(key);
+  const val=(inp.value||'').trim().toLowerCase(), correct=currentPrep[i].blank.toLowerCase();
+  if(val===correct){ inp.className='ia ok'; fb.className='fb ok'; fb.textContent='✓ 正解！'; totalCorrect++; }
+  else{ inp.className='ia ng'; fb.className='fb ng'; fb.textContent='✗ 不正解。正解：'+currentPrep[i].blank+'（'+currentPrep[i].hint+'）'; }
+  inp.disabled=true; updateScore();
+}
+
+function checkPV(i){
+  const inp=document.getElementById('pv-'+i), fb=document.getElementById('pv-fb-'+i), key='pv-'+i;
+  if(answeredSet.has(key)) return; answeredSet.add(key);
+  const val=(inp.value||'').trim().toLowerCase().replace(/\s+/g,' ');
+  const corrects = currentPV[i].target.toLowerCase().split('/').map(s=>s.trim());
+  const isCorrect = corrects.some(c=>c===val);
+  if(isCorrect){ inp.className='ia ok'; fb.className='fb ok'; fb.textContent='✓ 正解！'; totalCorrect++; }
+  else{ inp.className='ia ng'; fb.className='fb ng'; fb.textContent='✗ 不正解。正解：'+currentPV[i].target; }
+  inp.disabled=true; updateScore();
+}
+
+function markWC(btn, chosen){
+  const block=btn.closest('.qb');
+  if(block.dataset.done) return; block.dataset.done='1';
+  const correct=block.dataset.wcAnswer;
+  const idx=parseInt(block.querySelector('.qn').textContent.replace('問',''))-41;
+  block.querySelectorAll('.cb').forEach(b=>{
+    b.disabled=true; const w=b.textContent.slice(2);
+    if(w===correct) b.classList.add('correct');
+    else if(w===chosen && chosen!==correct) b.classList.add('wrong');
+  });
+  answeredSet.add(block);
+  const fb=document.getElementById('wc-fb-'+idx);
+  if(chosen===correct){ totalCorrect++; if(fb){fb.className='fb ok';fb.textContent='✓ 正解！';} }
+  else{ if(fb){fb.className='fb ng';fb.textContent='✗ 不正解。正解：'+correct;} }
+  updateScore();
+}
+
+function submitAll(auto){
+  if(finished) return; finished=true;
+  if(timerInterval) clearInterval(timerInterval);
+  currentPrep.forEach((_,i)=>checkPrep(i));
+  currentPV.forEach((_,i)=>checkPV(i));
+  const score=totalCorrect, pct=Math.round(score/50*100);
+  const box=document.getElementById('result-box'); box.style.display='block';
+  document.getElementById('final-score').textContent=score+' / 50点';
+
+  let rankText='', rankClass='', comment='', invite='';
+  if(score>=49){
+    rankText='🏆 Awesome!';
+    rankClass='rank-awesome';
+    comment='完璧に近い圧倒的なスコアです！英熟語の実力は最高レベルです。';
+    invite='🌟 49〜50点を達成されたあなたへ：ぜひご連絡ください。さらに上級の大会へご招待いたします！';
+  } else if(score>=45){
+    rankText='⭐ Excellent!';
+    rankClass='rank-excellent';
+    comment='素晴らしい！トップクラスの成績です。あと一歩で最高評価に届きます。';
+  } else if(score>=40){
+    rankText='👏 Great!';
+    rankClass='rank-great';
+    comment='とてもよくできました！上位レベルの実力があります。';
+  } else if(score>=35){
+    rankText='✨ Good!';
+    rankClass='rank-good';
+    comment='よくできました！間違えた問題を復習してさらにスコアアップを目指しましょう。';
+  } else if(score>=25){
+    rankText='📖 Keep Going!';
+    rankClass='rank-keep';
+    comment='半分以上正解できました。もう一度挑戦してさらに伸ばしましょう！';
+  } else {
+    rankText='💪 Try Again!';
+    rankClass='rank-try';
+    comment='もう少し！間違えた熟語をしっかり復習して、リトライしてみましょう。';
+  }
+
+  const rankEl=document.getElementById('rank-badge');
+  rankEl.textContent=rankText;
+  rankEl.className='rank-badge '+rankClass;
+  document.getElementById('final-sub').textContent=comment;
+
+  const inviteEl=document.getElementById('invite-msg');
+  if(invite){ inviteEl.textContent=invite; inviteEl.style.display='block'; }
+  else { inviteEl.style.display='none'; }
+
+  let elapsedStr='';
+  if(startTime){
+    const el=Math.round((Date.now()-startTime)/1000), em=Math.floor(el/60), es=el%60;
+    elapsedStr=pad(em)+'分'+pad(es)+'秒';
+    document.getElementById('elapsed').textContent='所要時間：'+elapsedStr;
+  }
+  attempt++;
+  const now=new Date(), dateStr=(now.getMonth()+1)+'/'+now.getDate()+' '+pad(now.getHours())+':'+pad(now.getMinutes());
+  history.push({attempt, set:setNumber, score, pct, elapsed:elapsedStr||'―', date:dateStr});
+  renderHistory();
+  box.scrollIntoView({behavior:'smooth'});
+}
+
+function renderHistory(){
+  const hbox=document.getElementById('history-box'); hbox.style.display='block';
+  const tbody=document.getElementById('history-body'); tbody.innerHTML='';
+  let txt='英熟語ターゲット1000 確認テスト 成績履歴\n';
+  txt+='回\tセット\t得点\t正答率\t所要時間\t日時\n';
+  history.forEach(h=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${h.attempt}回目</td><td>#${h.set}</td><td>${h.score} / 50</td><td>${h.pct}%</td><td>${h.elapsed}</td><td>${h.date}</td>`;
+    tbody.appendChild(tr);
+    txt+=`${h.attempt}回目\t#${h.set}\t${h.score}/50\t${h.pct}%\t${h.elapsed}\t${h.date}\n`;
+  });
+  document.getElementById('copy-box').textContent=txt;
+}
+
+function saveResult(){
+  const score=totalCorrect, pct=Math.round(score/50*100);
+  const now=new Date(), dateStr=now.getFullYear()+'/'+(now.getMonth()+1)+'/'+now.getDate()+' '+pad(now.getHours())+':'+pad(now.getMinutes());
+  let txt='【英熟語ターゲット1000 確認テスト結果】\n';
+  txt+='日時：'+dateStr+'\n問題セット：#'+setNumber+'\n得点：'+score+' / 50点\n正答率：'+pct+'%\n';
+  if(startTime){ const el=Math.round((Date.now()-startTime)/1000); txt+='所要時間：'+pad(Math.floor(el/60))+'分'+pad(el%60)+'秒\n'; }
+  document.getElementById('copy-box').textContent=txt;
+  document.getElementById('history-box').style.display='block';
+  copyText();
+}
+
+function copyText(){
+  const txt=document.getElementById('copy-box').textContent;
+  navigator.clipboard.writeText(txt).then(()=>{
+    alert('コピーしました！');
+  }).catch(()=>{ alert('コピーできませんでした。テキストを手動でコピーしてください。'); });
+}
+
+function resetState(newSet){
+  remaining=TOTAL_SEC; started=false; finished=false; startTime=null;
+  if(timerInterval){ clearInterval(timerInterval); timerInterval=null; }
+  totalCorrect=0; answeredSet.clear();
+  document.getElementById('tdisp').textContent='25:00';
+  document.getElementById('tdisp').className='timer-disp';
+  document.getElementById('prog').style.width='100%';
+  document.getElementById('prog').className='prog-fill';
+  document.getElementById('start-btn').textContent='スタート';
+  document.getElementById('start-btn').disabled=false;
+  document.getElementById('timeout-banner').style.display='none';
+  document.getElementById('result-box').style.display='none';
+  document.getElementById('correct-count').textContent='0';
+  document.getElementById('answered-count').textContent='0';
+}
+
+function retryTest(newSet){
+  resetState(newSet);
+  if(newSet){ buildNewSet(); }
+  else{ renderTest(); }
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* 初期化 */
+buildNewSet();
+</script>
+</body>
+</html>
